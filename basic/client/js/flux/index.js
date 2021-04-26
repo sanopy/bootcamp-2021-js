@@ -32,6 +32,12 @@ export const updateTodoAction = (todo_id) => ({
   payload: todo_id,
 });
 
+const DELETE_TODO_ACTION_TYPE = 'Delete todo element when clicked button';
+export const deleteTodoAction = (todo_id) => ({
+  type: DELETE_TODO_ACTION_TYPE,
+  payload: todo_id,
+});
+
 const CLEAR_ERROR = "Clear error from state";
 export const clearError = () => ({
   type: CLEAR_ERROR,
@@ -83,7 +89,8 @@ const reducer = async (prevState, { type, payload }) => {
     case UPDATE_TODO_ACTION_TYPE: {
       try {
         const id = payload;
-        const elm = defaultState.todoList[id];
+        const idx = defaultState.todoList.findIndex(el => el.id === id);
+        const elm = defaultState.todoList[idx];
         const params = {
           headers,
           method: 'PATCH',
@@ -93,7 +100,21 @@ const reducer = async (prevState, { type, payload }) => {
           })
         };
         const resp = await fetch(`${api}/${id}`, params).then((d) => d.json());
-        defaultState.todoList[id] = resp;
+        defaultState.todoList[idx] = resp;
+        return { todoList: defaultState.todoList, error: null };
+      } catch (err) {
+        return { ...prevState, error: err };
+      }
+    }
+    case DELETE_TODO_ACTION_TYPE: {
+      try {
+        const id = payload;
+        const params = {
+          headers,
+          method: 'DELETE'
+        };
+        await fetch(`${api}/${id}`, params);
+        defaultState.todoList = defaultState.todoList.filter(el => el.id !== id);
         return { todoList: defaultState.todoList, error: null };
       } catch (err) {
         return { ...prevState, error: err };

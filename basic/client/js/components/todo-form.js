@@ -9,7 +9,7 @@ class TodoForm {
 
   mount() {
     this.button.addEventListener('click', () => {
-      console.log('clicked');
+      console.log('submit:', 'clicked');
       store.dispatch(createTodoAction(this.form.value));
     });
   }

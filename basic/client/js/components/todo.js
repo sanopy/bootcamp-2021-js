@@ -1,4 +1,4 @@
-import { updateTodoAction } from '../flux/index.js';
+import { updateTodoAction, deleteTodoAction } from '../flux/index.js';
 import store from '../store.js';
 
 class Todo {
@@ -10,12 +10,17 @@ class Todo {
 
   mount() {
     if (this.mounted) return;
-    // TODO: ここにTODOの削除ボタンが押されたときの処理を追記
 
     const checkbox = this.element.querySelector('.todo-toggle');
     checkbox?.addEventListener('click', () => {
-      console.log(this.props.id, 'clicked');
+      console.log('update:', this.props.id, 'clicked');
       store.dispatch(updateTodoAction(this.props.id));
+    });
+
+    const removeButton = this.element.querySelector('.todo-remove-button');
+    removeButton?.addEventListener('click', () => {
+      console.log('delete:', this.props.id, 'clicked');
+      store.dispatch(deleteTodoAction(this.props.id));
     });
 
     this.mounted = true;
