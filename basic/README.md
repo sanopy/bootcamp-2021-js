@@ -72,11 +72,11 @@ $ curl -X POST http://localhost:3000/todo -H 'Content-Type: application/json' -d
 
 ![](./.meta/patch.gif)
 
-- [ ] `js/components/todo.js` を編集して，check ボタンに適当なイベントハンドラを登録しよう
-- [ ] TODO を 更新するという action creator を実装しよう
-- [ ] check ボタンが押されたら該当の action を dispatch しよう
-- [ ] reducer 関数に action 発生時の処理を追加しよう
-- [ ] API と接続しよう
+- [x] `js/components/todo.js` を編集して，check ボタンに適当なイベントハンドラを登録しよう
+- [x] TODO を 更新するという action creator を実装しよう
+- [x] check ボタンが押されたら該当の action を dispatch しよう
+- [x] reducer 関数に action 発生時の処理を追加しよう
+- [x] API と接続しよう
 
 ### TODO を削除できるようにする
 

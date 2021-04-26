@@ -21,9 +21,15 @@ export const createFetchTodoListAction = () => ({
 });
 
 const CREATE_TODO_ACTION_TYPE = 'Create todo element from user input'
-export const createTodoAction = (todo) => ({
+export const createTodoAction = (todo_name) => ({
   type: CREATE_TODO_ACTION_TYPE,
-  payload: todo,
+  payload: todo_name,
+});
+
+const UPDATE_TODO_ACTION_TYPE = 'Update todo element when clicked checkbox';
+export const updateTodoAction = (todo_id) => ({
+  type: UPDATE_TODO_ACTION_TYPE,
+  payload: todo_id,
 });
 
 const CLEAR_ERROR = "Clear error from state";
@@ -51,6 +57,7 @@ const reducer = async (prevState, { type, payload }) => {
     case FETCH_TODO_ACTION_TYPE: {
       try {
         const resp = await fetch(api).then((d) => d.json());
+        defaultState.todoList = resp.todoList;
         return { todoList: resp.todoList, error: null };
       } catch (err) {
         return { ...prevState, error: err };
@@ -68,6 +75,25 @@ const reducer = async (prevState, { type, payload }) => {
         };
         const resp = await fetch(api, params).then((d) => d.json());
         defaultState.todoList.push(resp);
+        return { todoList: defaultState.todoList, error: null };
+      } catch (err) {
+        return { ...prevState, error: err };
+      }
+    }
+    case UPDATE_TODO_ACTION_TYPE: {
+      try {
+        const id = payload;
+        const elm = defaultState.todoList[id];
+        const params = {
+          headers,
+          method: 'PATCH',
+          body: JSON.stringify({
+            name: elm.name,
+            done: !elm.done
+          })
+        };
+        const resp = await fetch(`${api}/${id}`, params).then((d) => d.json());
+        defaultState.todoList[id] = resp;
         return { todoList: defaultState.todoList, error: null };
       } catch (err) {
         return { ...prevState, error: err };
